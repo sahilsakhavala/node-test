@@ -3,6 +3,11 @@ import uploadFile from "../middleware/uploadfile.js";
 import { Hacker } from '../models/hacker.model.js';
 import findUserByEmail from '../helper/function.js';
 import Joi from 'joi';
+import sendMail from '../helper/mail.js';
+import fs from 'fs'
+import { promisify } from 'util'
+const readFileAsync = promisify(fs.readFile);
+import { createToken } from '../helper/jwtToken.js';
 
 const register = async (req, res) => {
     const registerSchema = Joi.object({
@@ -24,13 +29,25 @@ const register = async (req, res) => {
         }
         else {
             const hashedPassword = await bcrypt.hash(password, 10);
+            const payload = { randomString: '0780902840' }
+            const token = await createToken({ payload, expiresIn: '1h' });
             const data = await Hacker.create({
                 name: name,
                 email: email,
                 password: hashedPassword,
                 profile_image: image,
+                verify_token: token
             })
-            res.status(201).json({ success: true, message: "Hacker registered successfully" });
+            const htmlTemplate = await readFileAsync('./views/index.html', 'utf-8');
+            var mailOptions = {
+                from: process.env.EMAIL,
+                to: email,
+                subject: 'For verify your email',
+                html: htmlTemplate,
+                text: 'Please verify your email',
+            };
+            await sendMail(mailOptions);
+            res.status(201).json({ success: true, message: "Hacker registered successfully Plaese verify your email" });
         }
     } catch (error) {
         console.error("Error registering hacker:", error);
@@ -106,8 +123,23 @@ const update_profile = async (req, res) => {
     }
 };
 
+const verifyEmail = async (req, res) => {
+    try {
+        const { body: { token } } = req;
+        const userSession = await Hacker.findOne({ verify_token: token });
+        console.log(userSession);
+        if (!userSession) {
+            return res.status(401).json({ success: false, message: "Unauthorized" });
+        }
+        return res.status(200).json({ success: true, message: "Email verified successfully" });
+    } catch (error) {
+
+    }
+}
+
 export {
     register,
     get_profile,
-    update_profile
+    update_profile,
+    verifyEmail
 }

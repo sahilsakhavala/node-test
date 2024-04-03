@@ -4,7 +4,6 @@ const UserSessionSchema = new mongoose.Schema({
   token: {
     type: String,
     required: true,
-    maxLength: 300
   },
   role: {
     type: String,

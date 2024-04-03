@@ -28,6 +28,14 @@ const HackerSchema = new mongoose.Schema({
         type: String,
         enum: ["senior", "junior"],
         default: null
+    },
+    is_verify: {
+        type: Boolean,
+        default: false
+    },
+    verify_token: {
+        type: String,
+        default: null
     }
 }, {
     timestamps: true,
