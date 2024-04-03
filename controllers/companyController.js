@@ -1,7 +1,7 @@
 import { Company } from "../models/company.model.js";
 import bcrypt from 'bcrypt'
 import Joi from "joi";
-import { UserSession } from "../models/usersession.model.js";
+import { createDeleteOtherUserSessions } from "../helper/deleteTokenFunction.js";
 
 const get_profile = async (req, res) => {
     try {
@@ -58,13 +58,8 @@ const update_profile = async (req, res) => {
             }
             const hashedPassword = await bcrypt.hash(new_password, 10);
             updateObj.password = hashedPassword;
-            await UserSession.deleteMany({ user_id: id, role: role });
-            const token = jwt.sign({ userId: id }, config.secretKey);
-            const data = await UserSession.create({
-                token: token,
-                role: role,
-                user_id: id
-            })
+            const deleteSessions = createDeleteOtherUserSessions(id, role, authorization.split(' ')[1]);
+            await deleteSessions();
         }
 
         const data = await Company.findByIdAndUpdate(id, updateObj);

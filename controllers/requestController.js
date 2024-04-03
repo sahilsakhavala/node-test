@@ -36,9 +36,26 @@ const get_request = async (req, res) => {
         if (role !== 'admin') {
             return res.status(401).json({ success: false, message: "You are not a admin" });
         }
-        const data = await Request.find({ status: "pending" }).sort({ createdAt: -1 });
-        res.status(500).json({ success: true, data: data });
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+        const totalRequests = await Request.countDocuments({ status: "pending" });
+        const data = await Request.find({ status: "pending" })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        const totalPages = Math.ceil(totalRequests / limit);
+        res.status(500).json({
+            success: true,
+            data: data,
+            totalPages: totalPages,
+            lastPage: totalPages,
+            currentPage: page,
+            previousPage: page - 1,
+        });
     } catch (error) {
+        console.log('error', error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }

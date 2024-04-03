@@ -1,11 +1,10 @@
 import { Admin } from "../models/admin.model.js";
-import { Request } from "../models/request.model.js";
+import { createDeleteOtherUserSessions } from "../helper/deleteTokenFunction.js";
 import bcrypt from 'bcrypt'
 import Joi from "joi";
-import findUserByEmail from "../function/function.js";
+import findUserByEmail from "../helper/function.js";
 import { UserSession } from "../models/usersession.model.js";
-import jwt from 'jsonwebtoken'
-import config from "../config/db.config.js";
+import { createToken } from "../helper/jwtToken.js";
 
 const login = async (req, res) => {
     const registerSchema = Joi.object({
@@ -29,8 +28,8 @@ const login = async (req, res) => {
         if (!isValidPassword) {
             return res.status(401).json({ success: false, message: "Invalid email or password" });
         }
-
-        const token = jwt.sign({ userId: user.id }, config.secretKey);
+        const payload = { userId: user.id }
+        const token = await createToken(payload);
         const data = await UserSession.create({
             token: token,
             role: role,
@@ -74,8 +73,8 @@ const update_profile = async (req, res) => {
         return res.status(400).json({ message: error.details[0].message });
     }
     try {
-        const { user: { id, role, userSession_id }, body: { name, profile_image, new_password, old_password } } = req;
-
+        const { user: { id, role }, headers: { authorization }, body: { name, profile_image, new_password, old_password } } = req;
+        console.log(authorization);
         if (role !== 'admin') {
             return res.status(401).json({ success: false, message: "You are not an admin" });
         }
@@ -93,13 +92,8 @@ const update_profile = async (req, res) => {
             }
             const hashedPassword = await bcrypt.hash(new_password, 10);
             updateObj.password = hashedPassword;
-            await UserSession.deleteMany({ user_id: id, role: role });
-            const token = jwt.sign({ userId: id }, config.secretKey);
-            const data = await UserSession.create({
-                token: token,
-                role: role,
-                user_id: id
-            })
+            const deleteSessions = createDeleteOtherUserSessions(id, role, authorization.split(' ')[1]);
+            await deleteSessions();
         }
 
         const admin = await Admin.findByIdAndUpdate(id, updateObj);

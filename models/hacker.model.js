@@ -19,7 +19,7 @@ const HackerSchema = new mongoose.Schema({
         default: null,
         get: function (profile_image) {
             if (profile_image) {
-                return `${process.env.LOCALHOST_URL}/image/${profile_image}`;
+                return `${process.env.BASE_URL}/image/${profile_image}`;
             }
             return null
         }

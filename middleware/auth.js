@@ -4,6 +4,7 @@ import { UserSession } from "../models/usersession.model.js";
 import { Admin } from "../models/admin.model.js";
 import { Hacker } from "../models/hacker.model.js";
 import { Company } from "../models/company.model.js";
+import { verifyToken } from "../helper/jwtToken.js";
 
 const userAuth = async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -15,8 +16,8 @@ const userAuth = async (req, res, next) => {
   }
   var token = req.headers.authorization.split(' ')[1];
   try {
-    const user = jwt.verify(token, config.secretKey);
-    const id = user.userId
+    const user = await verifyToken(token);
+    const id = user.decoded.userId
     const checkAdmin = await Admin.findById(id);
     const checkCompany = await Hacker.findById(id);
     const checkHacker = await Company.findById(id);

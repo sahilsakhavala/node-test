@@ -1,9 +1,8 @@
 import bcrypt from 'bcrypt'
 import uploadFile from "../middleware/uploadfile.js";
 import { Hacker } from '../models/hacker.model.js';
-import findUserByEmail from '../function/function.js';
+import findUserByEmail from '../helper/function.js';
 import Joi from 'joi';
-import { UserSession } from '../models/usersession.model.js';
 
 const register = async (req, res) => {
     const registerSchema = Joi.object({
@@ -95,13 +94,8 @@ const update_profile = async (req, res) => {
             }
             const hashedPassword = await bcrypt.hash(new_password, 10);
             updateObj.password = hashedPassword;
-            await UserSession.deleteMany({ user_id: id, role: role });
-            const token = jwt.sign({ userId: id }, config.secretKey);
-            const data = await UserSession.create({
-                token: token,
-                role: role,
-                user_id: id
-            })
+            const deleteSessions = createDeleteOtherUserSessions(id, role, authorization.split(' ')[1]);
+            await deleteSessions();
         }
 
         const hacker = await Hacker.findByIdAndUpdate(id, updateObj);
