@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-const sendMail = async (mailOptions) => {
+const sendMail = async (emailObj) => {
     try {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -9,7 +9,13 @@ const sendMail = async (mailOptions) => {
                 pass: process.env.EMAIL_PASSWORD
             }
         });
-
+        const mailOptions = {
+            from: process.env.EMAIL,
+            to: emailObj.to,
+            subject: emailObj.subject,
+            html: emailObj.html,
+            text: emailObj.text,
+        };
         await transporter.sendMail(mailOptions);
         console.log('Email sent successfully');
     } catch (error) {
@@ -17,4 +23,6 @@ const sendMail = async (mailOptions) => {
     }
 };
 
-export default sendMail;
+export {
+    sendMail,
+};

@@ -6,6 +6,6 @@ import userAuth from '../middleware/auth.js'
 router.post('/hunter-register', register);
 router.get('/get-hunter-profile', userAuth, get_profile);
 router.post('/update-hunter-profile', userAuth, update_profile);
-router.post('/verify-email', verifyEmail);
+router.get('/verify-email', verifyEmail);
 
 export default router;

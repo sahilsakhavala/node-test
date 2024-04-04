@@ -6,8 +6,8 @@ import { UserSession } from "../models/usersession.model.js";
 
 const findUserByEmail = async (email) => {
     try {
-        const admin = await Admin.findOne({ email });
-        const hacker = await Hacker.findOne({ email });
+        const admin = await Admin.findOne({ email: email });
+        const hacker = await Hacker.findOne({ email, is_verify: true });
         const company = await Company.findOne({ email });
 
         if (admin) {
@@ -24,4 +24,6 @@ const findUserByEmail = async (email) => {
     }
 }
 
-export default findUserByEmail
+export {
+    findUserByEmail,
+}

@@ -10,15 +10,15 @@ const createToken = async (payload, expiresIn = null) => {
         }
     } catch (error) {
         console.log(error);
+        return { success: false, message: "Token verification failed" };
     }
 }
 
 const verifyToken = async (token) => {
     try {
-        const decoded = jwt.verify(token, config.secretKey);
-        return { success: true, decoded };
+        const verifyToken = await jwt.verify(token, config.secretKey);
+        return { success: true, user: verifyToken, message: "Token verified successfully" };
     } catch (error) {
-        console.error("Error verifying token:", error);
         return { success: false, message: "Token verification failed" };
     }
 }

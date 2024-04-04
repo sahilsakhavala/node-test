@@ -11,6 +11,9 @@ app.use(upload.any());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(process.cwd(), 'views'));
+
 app.use(express.static(path.join(process.cwd(), 'public')));
 
 app.use('/api/v1', router)

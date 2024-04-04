@@ -2,6 +2,8 @@ import { Company } from "../models/company.model.js";
 import bcrypt from 'bcrypt'
 import Joi from "joi";
 import { createDeleteOtherUserSessions } from "../helper/deleteTokenFunction.js";
+import { findUserByEmail } from "../helper/function.js";
+import { sendMail } from "../helper/mail.js";
 
 const get_profile = async (req, res) => {
     try {
@@ -58,8 +60,10 @@ const update_profile = async (req, res) => {
             }
             const hashedPassword = await bcrypt.hash(new_password, 10);
             updateObj.password = hashedPassword;
-            const deleteSessions = createDeleteOtherUserSessions(id, role, authorization.split(' ')[1]);
-            await deleteSessions();
+            const response = await createDeleteOtherUserSessions(id, role, authorization.split(' ')[1]);
+            if (!response) {
+                return res.status(401).json({ success: false, message: "Failed to delete other user sessions" });
+            }
         }
 
         const data = await Company.findByIdAndUpdate(id, updateObj);
@@ -70,7 +74,49 @@ const update_profile = async (req, res) => {
     }
 };
 
+
+const addCompany = async (req, res) => {
+    const registerSchema = Joi.object({
+        name: Joi.string().required(),
+        email: Joi.string().email().required(),
+        password: Joi.string().required().min(8),
+    });
+    const { error } = registerSchema.validate(req.body);
+    if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+    }
+    try {
+        const { user: { id, role } } = req
+        if (role !== 'admin') {
+            return res.status(401).json({ success: false, message: "You are not a admin" });
+        }
+
+        const { name, email, password } = req.body
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const verifyEmail = await findUserByEmail(email)
+        if (verifyEmail.user !== null) {
+            return res.status(400).json({ success: false, message: "Email already exists" });
+        }
+        await Company.create({
+            name: name,
+            email: email,
+            password: hashedPassword,
+        })
+        const emailObj = {
+            to: email,
+            subject: 'Registration successful',
+            text: 'Registration successful',
+        };
+        await sendMail(emailObj);
+        res.status(201).json({ success: true, message: "Company registered successfully" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+}
+
 export {
     get_profile,
-    update_profile
+    update_profile,
+    addCompany
 };

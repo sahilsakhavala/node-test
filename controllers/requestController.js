@@ -2,6 +2,10 @@ import { Request } from "../models/request.model.js";
 import { Company } from "../models/company.model.js";
 import bcrypt from 'bcrypt'
 import Joi from "joi";
+import { sendMail } from "../helper/mail.js";
+import ejs from 'ejs'
+
+import { findUserByEmail } from "../helper/function.js";
 
 const request = async (req, res) => {
     const registerSchema = Joi.object({
@@ -16,12 +20,17 @@ const request = async (req, res) => {
     try {
         const { name, email, password } = req.body
         const hashedPassword = await bcrypt.hash(password, 10);
-        const request = new Request({
+        await Request.create({
             name: name,
             email: email,
             password: hashedPassword,
         })
-        await request.save()
+        const emailObj = {
+            to: email,
+            subject: 'For verify your email',
+            text: 'Please verify your email',
+        };
+        await sendMail(emailObj);
         res.status(201).json({ success: true, message: "Request send successfully" });
     } catch (error) {
         console.log(error);
@@ -74,7 +83,6 @@ const handle_request = async (req, res) => {
         if (role !== 'admin') {
             return res.status(401).json({ success: false, message: "You are not a admin" });
         }
-
         const { request_id, status } = req.body;
         console.log(request_id);
         const request = await Request.findOne({ _id: request_id, status: "pending" });
@@ -83,7 +91,6 @@ const handle_request = async (req, res) => {
             return res.status(404).json({ success: false, message: "Request not found" });
         }
 
-        console.log('request', request)
         if (status === 'approved') {
             const { user } = await findUserByEmail(email);
             if (user) {
@@ -93,7 +100,13 @@ const handle_request = async (req, res) => {
                 { _id: request_id },
                 { $set: { status: status } },
             )
-            const company = await Company.create({ name: request.name, email: request.email, password: request.password })
+            const emailObj = {
+                to: email,
+                subject: 'Registration Successful',
+                text: 'Your request Approved successfully',
+            };
+            await sendMail(emailObj);
+            await Company.create({ name: request.name, email: request.email, password: request.password })
             return res.status(200).json({ success: true, message: "Request Approved successfully" });
         }
         else {

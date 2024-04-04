@@ -1,8 +1,9 @@
 import { Admin } from "../models/admin.model.js";
+import { Company } from "../models/company.model.js";
 import { createDeleteOtherUserSessions } from "../helper/deleteTokenFunction.js";
 import bcrypt from 'bcrypt'
 import Joi from "joi";
-import findUserByEmail from "../helper/function.js";
+import { findUserByEmail } from "../helper/function.js";
 import { UserSession } from "../models/usersession.model.js";
 import { createToken } from "../helper/jwtToken.js";
 
@@ -92,8 +93,10 @@ const update_profile = async (req, res) => {
             }
             const hashedPassword = await bcrypt.hash(new_password, 10);
             updateObj.password = hashedPassword;
-            const deleteSessions = createDeleteOtherUserSessions(id, role, authorization.split(' ')[1]);
-            await deleteSessions();
+            const response = await createDeleteOtherUserSessions(id, role, authorization.split(' ')[1]);
+            if (!response) {
+                return res.status(401).json({ success: false, message: "Failed to delete other user sessions" });
+            }
         }
 
         const admin = await Admin.findByIdAndUpdate(id, updateObj);
@@ -125,5 +128,5 @@ export {
     login,
     get_profile,
     update_profile,
-    logout
+    logout,
 }

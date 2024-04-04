@@ -16,8 +16,14 @@ const userAuth = async (req, res, next) => {
   }
   var token = req.headers.authorization.split(' ')[1];
   try {
-    const user = await verifyToken(token);
-    const id = user.decoded.userId
+    const verifyResponse = await verifyToken(token);
+    if (!verifyResponse.success) {
+      return res.status(401).json({
+        status: 'fail',
+        message: 'Token verification failed'
+      })
+    }
+    const id = verifyResponse.user.userId
     const checkAdmin = await Admin.findById(id);
     const checkCompany = await Hacker.findById(id);
     const checkHacker = await Company.findById(id);
@@ -34,7 +40,7 @@ const userAuth = async (req, res, next) => {
         message: 'Unauthorized!'
       })
     }
-    req.user = { id: user.userId, role: userSession.role, userSession_id: userSession._id };
+    req.user = { id: id, role: userSession.role, userSession_id: userSession._id };
     next();
   } catch (error) {
     console.log('error', error)
