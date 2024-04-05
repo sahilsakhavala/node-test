@@ -62,36 +62,59 @@ const createProgram = async (req, res) => {
 
 const getProgramsForAdmin = async (req, res) => {
     try {
-        const { user: { id, role }, params: { program_id } } = req
+        const { user: { id, role }, query: { status } } = req;
+
+        if (role !== 'admin') {
+            return res.status(401).json({ success: false, message: "You are not an admin" });
+        }
+
+        if (!status) {
+            const data = await Program.find().populate('severity_rating');
+            return res.status(200).json({ success: true, data: data });
+        }
+
+        const data = await Program.find({ status: status }).populate('severity_rating');
+
+        if (data.length === 0) {
+            return res.status(404).json({ success: false, message: "No programs found with the given status" });
+        }
+
+        return res.status(200).json({ success: true, data: data });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+};
+
+
+const getProgramsByIdForAdmin = async (req, res) => {
+    try {
+        const { user: { role }, params: { program_id } } = req
         if (role !== 'admin') {
             return res.status(401).json({ success: false, message: "You are not a admin" });
         }
 
-        if (program_id) {
-            const data = await Program.findById(program_id)
-                .sort({ createdAt: -1 })
-                .populate('severity_rating')
-            if (!data) {
-                return res.status(404).json({ success: false, message: "Program not found" });
-            }
-            return res.status(200).json({ success: true, data: data })
+        const data = await Program.findById(program_id)
+            .populate('severity_rating')
+        if (!data) {
+            return res.status(404).json({ success: false, message: "Program not found" });
         }
-        const data = await Program.find().sort({ createdAt: -1 })
         return res.status(200).json({ success: true, data: data })
+
     } catch (error) {
         console.log(error);
         return res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
 
-const getProgramForCompany = async (req, res) => {
+const getApprovedProgramForCompany = async (req, res) => {
     try {
         const { user: { id, role } } = req;
         if (role !== 'company') {
             return res.status(401).json({ success: false, message: "You are not a company" });
         }
 
-        const data = await Program.findOne({ company_id: id })
+        const data = await Program.findOne({ company_id: id, status: 'approved' })
             .sort({ createdAt: -1 })
             .populate('severity_rating')
 
@@ -106,6 +129,27 @@ const getProgramForCompany = async (req, res) => {
     }
 };
 
+const getClosedProgramForCompany = async (req, res) => {
+    try {
+        const { user: { id, role } } = req;
+        if (role !== 'company') {
+            return res.status(401).json({ success: false, message: "You are not a company" });
+        }
+
+        const data = await Program.findOne({ company_id: id, status: 'close' })
+            .sort({ createdAt: -1 })
+            .populate('severity_rating')
+
+        if (!data) {
+            return res.status(404).json({ success: false, message: "Program not found" });
+        }
+
+        return res.status(200).json({ success: true, data: data });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+};
 
 const getProgramForHacker = async (req, res) => {
     try {
@@ -241,7 +285,7 @@ const approveProgram = async (req, res) => {
             return res.status(401).json({ success: false, message: "You are not a admin" });
         }
 
-        const verifyProgram = await Program.findById(program_id);
+        const verifyProgram = await Program.findOne({ program_id, status: 'pending' });
         if (!verifyProgram) {
             return res.status(404).json({ success: false, message: "Program not found" });
         }
@@ -260,7 +304,9 @@ const approveProgram = async (req, res) => {
 export {
     createProgram,
     getProgramsForAdmin,
-    getProgramForCompany,
+    getProgramsByIdForAdmin,
+    getApprovedProgramForCompany,
+    getClosedProgramForCompany,
     getProgramForHacker,
     updateProgramByAdmin,
     updateProgramByCompany,
