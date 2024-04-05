@@ -62,24 +62,29 @@ const createProgram = async (req, res) => {
 
 const getProgramsForAdmin = async (req, res) => {
     try {
-        const { user: { id, role }, query: { status } } = req;
+        const { user: { role }, query: { status } } = req;
 
         if (role !== 'admin') {
             return res.status(401).json({ success: false, message: "You are not an admin" });
         }
 
-        if (!status) {
-            const data = await Program.find().populate('severity_rating');
-            return res.status(200).json({ success: true, data: data });
-        }
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+        const totaldata = await Program.countDocuments({ status: status });
+        const data = await Program.find({ status: status }).populate('severity_rating')
+            .skip(skip)
+            .limit(limit);
+        const totalPages = Math.ceil(totaldata / limit);
 
-        const data = await Program.find({ status: status }).populate('severity_rating');
-
-        if (data.length === 0) {
-            return res.status(404).json({ success: false, message: "No programs found with the given status" });
-        }
-
-        return res.status(200).json({ success: true, data: data });
+        return res.status(200).json({
+            success: true,
+            data: data,
+            totalPages: totalPages,
+            lastPage: totalPages,
+            currentPage: page,
+            previousPage: page - 1,
+        });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -114,15 +119,24 @@ const getApprovedProgramForCompany = async (req, res) => {
             return res.status(401).json({ success: false, message: "You are not a company" });
         }
 
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+        const totaldata = await Program.countDocuments({ company_id: id });
+        const totalPages = Math.ceil(totaldata / limit);
         const data = await Program.findOne({ company_id: id, status: 'approved' })
-            .sort({ createdAt: -1 })
             .populate('severity_rating')
+            .skip(skip)
+            .limit(limit);
 
-        if (!data) {
-            return res.status(404).json({ success: false, message: "Program not found" });
-        }
-
-        return res.status(200).json({ success: true, data: data });
+        return res.status(200).json({
+            success: true,
+            data: data,
+            totalPages: totalPages,
+            lastPage: totalPages,
+            currentPage: page,
+            previousPage: page - 1,
+        });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -136,15 +150,24 @@ const getClosedProgramForCompany = async (req, res) => {
             return res.status(401).json({ success: false, message: "You are not a company" });
         }
 
-        const data = await Program.findOne({ company_id: id, status: 'close' })
-            .sort({ createdAt: -1 })
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+        const totaldata = await Program.countDocuments({ company_id: id, status: 'close' });
+        const totalPages = Math.ceil(totaldata / limit);
+        const data = await Program.find({ company_id: id, status: 'close' })
             .populate('severity_rating')
+            .skip(skip)
+            .limit(limit);
 
-        if (!data) {
-            return res.status(404).json({ success: false, message: "Program not found" });
-        }
-
-        return res.status(200).json({ success: true, data: data });
+        return res.status(200).json({
+            success: true,
+            data: data,
+            totalPages: totalPages,
+            lastPage: totalPages,
+            currentPage: page,
+            previousPage: page - 1,
+        });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ success: false, message: "Internal Server Error" });
