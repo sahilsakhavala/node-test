@@ -1,5 +1,5 @@
-import express from 'express'
-const router = express.Router()
+import { Router } from 'express'
+const router = Router()
 import { get_profile, register, update_profile, verifyEmail } from '../controllers/hackerController.js'
 import userAuth from '../middleware/auth.js'
 

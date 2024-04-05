@@ -6,6 +6,7 @@ import Joi from 'joi';
 import { sendMail } from '../helper/mail.js';
 import { createToken, verifyToken } from '../helper/jwtToken.js';
 import ejs from 'ejs'
+import { fileValidation } from '../helper/image.js';
 
 const register = async (req, res) => {
     const registerSchema = Joi.object({
@@ -21,6 +22,13 @@ const register = async (req, res) => {
         const { name, email, password } = req.body
         const file = req.files
         const image = uploadFile(file);
+        const verifyFile = await fileValidation(file);
+        if (!verifyFile.success) {
+            return res.status(422).json({
+                success: false,
+                message: verifyFile.message
+            });
+        }
 
         const emailVerify = await findUserByEmail(email);
         if (emailVerify.user !== null) {
@@ -95,7 +103,10 @@ const update_profile = async (req, res) => {
         return res.status(400).json({ message: error.details[0].message });
     }
     try {
-        const { user: { id, role }, body: { name, profile_image, new_password, old_password } } = req;
+        const { user: { id, role },
+            body: { name, new_password, old_password },
+            files: { profile_image },
+        } = req;
 
         if (role !== 'hacker') {
             return res.status(401).json({ success: false, message: "You are not an admin" });
