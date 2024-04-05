@@ -1,0 +1,933 @@
+{
+	"info": {
+		"_postman_id": "7af8df5b-d9a6-41c2-a01d-86043fb046c6",
+		"name": "nodejstest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28631413"
+	},
+	"item": [
+		{
+			"name": "company",
+			"item": [
+				{
+					"name": "update-company-profile",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{company_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "company",
+									"type": "text"
+								},
+								{
+									"key": "new_password",
+									"value": "company@2222",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/update-company-profile",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"update-company-profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-company-profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearrer {{company_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/get-company-profile",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"get-company-profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add-company",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "company1",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "company1@mailinator.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/add-company",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"add-company"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "get-admin-profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/get-admin-profile",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"get-admin-profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-admin-profile",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "admins",
+									"type": "text"
+								},
+								{
+									"key": "new_password",
+									"value": "admin@222",
+									"type": "text"
+								},
+								{
+									"key": "profile_image",
+									"type": "file",
+									"src": "/C:/Users/Jay Bhavani/Pictures/Camera Roll/download (3).jpg",
+									"disabled": true
+								},
+								{
+									"key": "old_password",
+									"value": "admin@222",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/update-admin-profile",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"update-admin-profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "hacker",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "hacker",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "s@mailinator.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								},
+								{
+									"key": "profile_image",
+									"type": "file",
+									"src": "/C:/Users/Jay Bhavani/Pictures/XOsX.gif"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/hunter-register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"hunter-register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "company@mailinator.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "company@222",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-hacker-profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{hacker_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/get-hunter-profile",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"get-hunter-profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-hacker-profile",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{hacker_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "hacker",
+									"type": "text"
+								},
+								{
+									"key": "new_password",
+									"value": "hacker@222",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "profile_image",
+									"type": "file",
+									"src": "/C:/Users/Jay Bhavani/Pictures/Camera Roll/putting-on-headphones.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/update-hunter-profile",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"update-hunter-profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjBiZTY1YTBlMjJiMWFkODM1NTkxODAiLCJpYXQiOjE3MTIwNTU5MDJ9.Bw7ekgCWq9WU4gbRmnizEhA10Qo_aE-VEjUW3ZEx8IY",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/logout",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verify-email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyYW5kb21TdHJpbmciOiIwNzgwOTAyODQwIiwiaWF0IjoxNzEyMjExNTU4LCJleHAiOjE3MTIyMTUxNTh9.X1kAEwBUefkLelp2hgcNBuVHyGx63-cMPBXRTD31ktA",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/verify-email",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"verify-email"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "request",
+			"item": [
+				{
+					"name": "request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "company",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "company@mailinator.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "company@222",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/request",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-request",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/get-request?page=1&limit=2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"get-request"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "handle-request",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "request_id",
+									"value": "660e66dab85e4a18271923b4",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "approved",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/handle-request",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"handle-request"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "program",
+			"item": [
+				{
+					"name": "create-program",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{company_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Sample Program\",\r\n    \"description\": \"This is a sample program description.\",\r\n    \"start_date\": \"2024-04-01\",\r\n    \"min_reward\": 100,\r\n    \"max_reward\": 500,\r\n    \"focus_area\": \"Security\",\r\n    \"program_rules\": \"These are the rules of the sample program.\",\r\n    \"severity_rating\": {\r\n        \"low\": 1,\r\n        \"medium\": 2,\r\n        \"high\": 3,\r\n        \"critical\": 4\r\n    }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/create-program",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"create-program"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-program-admin-by-status",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{url}}/get-program-for-admin/?status=approved&page=2&limit=2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"get-program-for-admin",
+								""
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "approved"
+								},
+								{
+									"key": "page",
+									"value": "2"
+								},
+								{
+									"key": "limit",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-approved-program-company",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{company_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/get-approved-program-for-company",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"get-approved-program-for-company"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-program-hacker",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{hacker_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/get-program-for-hacker/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"get-program-for-hacker",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-program-by-admin",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "program",
+									"type": "text"
+								},
+								{
+									"key": "severity_rating",
+									"value": "{\"low\":2, \"medium\":2, \"high\":3, \"critical\":5}",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "This is a sample program description2.",
+									"type": "text"
+								},
+								{
+									"key": "start_date",
+									"value": "2024-04-010",
+									"type": "text"
+								},
+								{
+									"key": "min_reward",
+									"value": "500",
+									"type": "text"
+								},
+								{
+									"key": "max_reward",
+									"value": "2500",
+									"type": "text"
+								},
+								{
+									"key": "focus_area",
+									"value": "Security1",
+									"type": "text"
+								},
+								{
+									"key": "program_rules",
+									"value": "These are the rules of the sample program2.",
+									"type": "text"
+								},
+								{
+									"key": "logo",
+									"type": "file",
+									"src": "/C:/Users/Jay Bhavani/Pictures/XOsX.gif"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/update-program-by-admin/660fa0c088643c7fb876295e",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"update-program-by-admin",
+								"660fa0c088643c7fb876295e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-program-by-company",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{company_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "program",
+									"type": "text"
+								},
+								{
+									"key": "severity_rating",
+									"value": "{\"low\":2, \"medium\":2, \"high\":3, \"critical\":5}",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "This is a sample program description.",
+									"type": "text"
+								},
+								{
+									"key": "start_date",
+									"value": "2024-04-01",
+									"type": "text"
+								},
+								{
+									"key": "min_reward",
+									"value": "100",
+									"type": "text"
+								},
+								{
+									"key": "max_reward",
+									"value": "500",
+									"type": "text"
+								},
+								{
+									"key": "focus_area",
+									"value": "Security",
+									"type": "text"
+								},
+								{
+									"key": "program_rules",
+									"value": "These are the rules of the sample program.",
+									"type": "text"
+								},
+								{
+									"key": "logo",
+									"type": "file",
+									"src": "/C:/Users/Jay Bhavani/Pictures/admin.png",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/update-program-by-company/660fa0c088643c7fb876295e",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"update-program-by-company",
+								"660fa0c088643c7fb876295e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "approve-program",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "program_id",
+									"value": "660f9fd94c2c5d6a7c3bf913",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "approved",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/approve-program",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"approve-program"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-program-admin-by-id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/get-program-for-admin/660fda012c6a5742ef34fcf6",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"get-program-for-admin",
+								"660fda012c6a5742ef34fcf6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_close_program_of_company",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{company_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/get-closed-program-for-company?page=1&limit=1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"get-closed-program-for-company"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:3000/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "admin_token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjBiY2Q5N2U5NWI0MDMzODQ4MjFjYjMiLCJpYXQiOjE3MTIyMTI3MDR9.QwM-snRkZwPfN1ehXZF0tXw6OZXRGUDEpA86yGCj-XI",
+			"type": "string"
+		},
+		{
+			"key": "company_token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjBlODJkZjFiMzg0ZTZkMTE1Y2Q4ZDciLCJpYXQiOjE3MTIzMTQ4NDd9.r95t8lauh0TS_6PMakjbOfYnGE8KqkQab5QQRrv1NJc",
+			"type": "string"
+		},
+		{
+			"key": "hacker_token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjBlN2NkNGUwNGI3NmM5NWM4YTVjYjgiLCJpYXQiOjE3MTIyMjc0ODR9.NijRvsGwj7WDeDL1Q1zBgiimLAxDTlu1bcCaVYN8RMY",
+			"type": "string"
+		}
+	]
+}
