@@ -211,7 +211,7 @@
 								},
 								{
 									"key": "email",
-									"value": "s@mailinator.com",
+									"value": "hacker@mailinator.com",
 									"type": "text"
 								},
 								{
@@ -488,7 +488,7 @@
 							"formdata": [
 								{
 									"key": "request_id",
-									"value": "660e66dab85e4a18271923b4",
+									"value": "6613bac2ffe7f3e6a0bd80bb",
 									"type": "text"
 								},
 								{
@@ -804,7 +804,7 @@
 							"formdata": [
 								{
 									"key": "program_id",
-									"value": "660f9fd94c2c5d6a7c3bf913",
+									"value": "6613bda171d5a9424132b450",
 									"type": "text"
 								},
 								{
@@ -882,6 +882,105 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "close-program-by-admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "program_id",
+									"value": "6613bda171d5a9424132b450",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/close-program-by-admin",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"close-program-by-admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "close-program-by-company",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{company_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "program_id",
+									"value": "66137b281c29ad7a9440c1b2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/close-program-by-company",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"close-program-by-company"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reopen-program",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "program_id",
+									"value": "6613bda171d5a9424132b450",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/reopen-program",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"reopen-program"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
@@ -916,17 +1015,17 @@
 		},
 		{
 			"key": "admin_token",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjBiY2Q5N2U5NWI0MDMzODQ4MjFjYjMiLCJpYXQiOjE3MTIyMTI3MDR9.QwM-snRkZwPfN1ehXZF0tXw6OZXRGUDEpA86yGCj-XI",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjEzYmFjMmZmZTdmM2U2YTBiZDgwYmIiLCJpYXQiOjE3MTI1Njk2NDV9.S70k90YHf5bJiaj1WrfrhH3vKtbx3CGKTmQvPbIYK8A",
 			"type": "string"
 		},
 		{
 			"key": "company_token",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjBlODJkZjFiMzg0ZTZkMTE1Y2Q4ZDciLCJpYXQiOjE3MTIzMTQ4NDd9.r95t8lauh0TS_6PMakjbOfYnGE8KqkQab5QQRrv1NJc",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjEzYmQ1YjcxZDVhOTQyNDEzMmI0NDQiLCJpYXQiOjE3MTI1Njk3MTd9.axRi7woRxxvrneo9GLh0CbQs14MLA0O2MA3F-AYxe30",
 			"type": "string"
 		},
 		{
 			"key": "hacker_token",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjBlN2NkNGUwNGI3NmM5NWM4YTVjYjgiLCJpYXQiOjE3MTIyMjc0ODR9.NijRvsGwj7WDeDL1Q1zBgiimLAxDTlu1bcCaVYN8RMY",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjEzYjlhMGQ3ZTZkM2ZiODgxZmEzZTAiLCJpYXQiOjE3MTI1Njg5ODl9.iEEEfSny7TGdUqZWSt_UE6uzSVQ8sQZSGrvI0uFIk60",
 			"type": "string"
 		}
 	]
