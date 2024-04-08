@@ -397,7 +397,7 @@ const reopenProgram = async (req, res) => {
             return res.status(401).json({ success: false, message: "You are not a admin" });
         }
 
-        const program = await Program.findOne({ _id: program_id });
+        const program = await Program.findById(program_id);
         const verifyProgram = await Program.findOne({ company_id: program.company_id, status: 'approved' });
         if (verifyProgram) {
             return res.status(403).json({ success: false, message: "Program already exist" });
