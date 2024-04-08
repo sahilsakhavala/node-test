@@ -1,6 +1,6 @@
 import express from 'express'
 const router = express.Router()
-import { createProgram, getProgramsForAdmin, getProgramsByIdForAdmin, getApprovedProgramForCompany, getClosedProgramForCompany, getProgramForHacker, updateProgramByAdmin, updateProgramByCompany, approveProgram } from '../controllers/programController.js';
+import { createProgram, getProgramsForAdmin, getProgramsByIdForAdmin, getApprovedProgramForCompany, getClosedProgramForCompany, getProgramForHacker, updateProgramByAdmin, updateProgramByCompany, approveProgram, closeProgramByAdmin, closeProgramByCompany } from '../controllers/programController.js';
 import userAuth from '../middleware/auth.js';
 
 router.post('/create-program', userAuth, createProgram);
@@ -13,5 +13,7 @@ router.get('/get-program-for-hacker/:program_id', userAuth, getProgramForHacker)
 router.put('/update-program-by-admin/:program_id', userAuth, updateProgramByAdmin);
 router.post('/update-program-by-company/:program_id', userAuth, updateProgramByCompany);
 router.post('/approve-program/', userAuth, approveProgram);
+router.post('/close-program-by-admin/', userAuth, closeProgramByAdmin);
+router.post('/close-program-by-company/', userAuth, closeProgramByCompany);
 
 export default router;

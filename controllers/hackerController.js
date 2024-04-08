@@ -49,7 +49,6 @@ const register = async (req, res) => {
         };
         await Hacker.updateOne({ email: email, is_verify: false }, { $set: object }, { upsert: true });
 
-
         let link = `${process.env.BASE_URL}/api/v1/verify-email?token=${token}`
         const renderedTemplate = await ejs.renderFile('./views/index.ejs', { link: link });
         const emailObj = {
@@ -155,7 +154,7 @@ const verifyEmail = async (req, res) => {
         if (!data) {
             return res.status(401).json({ success: false, message: "Invalid token" });
         }
-        const verifyEmail = await findUserByEmail(email)
+        const verifyEmail = await findUserByEmail(data.email)
         if (verifyEmail.user !== null) {
             return res.status(401).json({ success: false, message: "Email already exists" });
         }

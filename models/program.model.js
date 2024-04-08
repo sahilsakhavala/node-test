@@ -45,7 +45,7 @@ const programSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ["pending", "approved", "close"],
+        enum: ["pending", "approved", "rejected", "closed"],
         default: "pending"
     }
 })

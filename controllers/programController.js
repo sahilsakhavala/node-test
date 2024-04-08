@@ -324,6 +324,69 @@ const approveProgram = async (req, res) => {
     }
 }
 
+const closeProgramByAdmin = async (req, res) => {
+    const requestSchema = Joi.object({
+        program_id: Joi.string().required(),
+    });
+    const { error } = requestSchema.validate(req.body);
+    if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+    }
+    try {
+        const { user: { role },
+            body: { program_id }
+        } = req;
+        if (role !== 'admin') {
+            return res.status(401).json({ success: false, message: "You are not a admin" });
+        }
+
+        const verifyProgram = await Program.findOne({ _id: program_id, status: 'approved' });
+        if (!verifyProgram) {
+            return res.status(404).json({ success: false, message: "Program already closed" });
+        }
+
+        await Program.findByIdAndUpdate(program_id, { status: 'closed' })
+        return res.status(200).json({ success: true, message: "Program not found" });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+}
+
+const closeProgramByCompany = async (req, res) => {
+    const requestSchema = Joi.object({
+        program_id: Joi.string().required(),
+    });
+    const { error } = requestSchema.validate(req.body);
+    if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+    }
+    try {
+        const { user: { id, role },
+            body: { program_id }
+        } = req;
+        if (role !== 'company') {
+            return res.status(401).json({ success: false, message: "You are not a company" });
+        }
+
+        const program = await Program.findOne({ company_id: id });
+        if (!program) {
+            return res.status(403).json({ success: false, message: "You are not authorized to update this program" });
+        }
+
+        const verifyProgram = await Program.findOne({ _id: program_id, status: 'approved' });
+        if (!verifyProgram) {
+            return res.status(404).json({ success: false, message: "Program not found" });
+        }
+
+        await Program.findByIdAndUpdate(program_id, { status: 'closed' })
+        return res.status(200).json({ success: true, message: "Program closed successfully" });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+}
+
 export {
     createProgram,
     getProgramsForAdmin,
@@ -333,5 +396,7 @@ export {
     getProgramForHacker,
     updateProgramByAdmin,
     updateProgramByCompany,
-    approveProgram
+    approveProgram,
+    closeProgramByAdmin,
+    closeProgramByCompany
 }
