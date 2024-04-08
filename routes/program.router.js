@@ -1,6 +1,5 @@
 import express from 'express'
 const router = express.Router()
-import { createProgram, getProgramsForAdmin, getProgramsByIdForAdmin, getApprovedProgramForCompany, getClosedProgramForCompany, getProgramForHacker, updateProgramByAdmin, updateProgramByCompany, approveProgram, closeProgramByAdmin, closeProgramByCompany } from '../controllers/programController.js';
 import { createProgram, getProgramsForAdmin, getProgramsByIdForAdmin, getApprovedProgramForCompany, getClosedProgramForCompany, getProgramForHacker, updateProgramByAdmin, updateProgramByCompany, approveProgram, closeProgramByAdmin, closeProgramByCompany, reopenProgram } from '../controllers/programController.js';
 import userAuth from '../middleware/auth.js';
 
