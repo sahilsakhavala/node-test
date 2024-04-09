@@ -390,7 +390,7 @@ const reopenProgram = async (req, res) => {
         return res.status(400).json({ message: error.details[0].message });
     }
     try {
-        const { user: { id, role },
+        const { user: { role },
             body: { program_id }
         } = req;
         if (role !== 'admin') {

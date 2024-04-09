@@ -13,6 +13,10 @@ const HackerSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    wallet_id: {
+        type: String,
+        required: true
+    },
     profile_image: {
         type: String,
         default: null,
