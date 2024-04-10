@@ -45,10 +45,9 @@ const reportSchema = new mongoose.Schema({
         enum: ["new", "escalated", "informative", "not_applicable", "duplicate", "triaged", "resolved"],
         default: "new"
     },
-    submission_status: {
-        type: String,
-        enum: ["draft", "submitted"],
-        requred: true
+    is_draft: {
+        type: Boolean,
+        required: true
     }
 },
     {

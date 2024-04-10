@@ -19,16 +19,26 @@ async function fileValidation(file) {
     }
 }
 
-const upload = async (fileObjArray, req, res) => {
+const upload = async (fileObjArray) => {
     let images = [];
 
     if (!Array.isArray(fileObjArray)) {
-        return res.status(400).json({ success: false, message: "File array is missing or not provided" });
+        return { success: false, message: "File array is missing or not provided" };
+    }
+
+    if (fileObjArray.length > 5) {
+        return { success: false, message: "Exceeded maximum limit of 5 files" };
     }
 
     let hasInvalidFiles = false;
+    let hasSizeExceededFiles = false;
 
     fileObjArray.forEach((fileObj, index) => {
+        if (fileObj.size > 50 * 1024 * 1024) {
+            hasSizeExceededFiles = true;
+            return;
+        }
+
         if (path.extname(fileObj.originalname) !== '.zip') {
             hasInvalidFiles = true;
         } else {
@@ -40,6 +50,10 @@ const upload = async (fileObjArray, req, res) => {
             images.push(image);
         }
     });
+
+    if (hasSizeExceededFiles) {
+        return { success: false, message: "Each file size should not exceed 50MB" };
+    }
 
     if (hasInvalidFiles) {
         return { success: false, message: "Only zip files are allowed" };

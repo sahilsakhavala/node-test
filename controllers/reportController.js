@@ -4,7 +4,6 @@ import { Program } from "../models/program.model.js";
 import { ReportImage } from "../models/reportImage.model.js";
 import { upload } from "../helper/image.js";
 import Joi from 'joi';
-import { ObjectId } from 'mongoose'
 
 const createReport = async (req, res) => {
     const requestSchema = Joi.object({
@@ -15,7 +14,7 @@ const createReport = async (req, res) => {
         severity_picker: Joi.string().valid('low', 'medium', 'high', 'critical').required(),
         proof_of_concept: Joi.string().required(),
         vulnerability_impact: Joi.string().required(),
-        submission_status: Joi.string().valid('draft', 'submit').required(),
+        is_draft: Joi.boolean().required(),
     });
     const { error } = requestSchema.validate(req.body);
     if (error) {
@@ -32,7 +31,7 @@ const createReport = async (req, res) => {
                 severity_picker,
                 proof_of_concept,
                 vulnerability_impact,
-                submission_status
+                is_draft
             } } = req;
         if (role !== 'hacker') {
             return res.status(401).json({ success: false, message: "You are not a hacker" });
@@ -48,7 +47,7 @@ const createReport = async (req, res) => {
             return res.status(404).json({ success: false, message: "First add wallet id" });
         }
 
-        const verifyImage = await upload(req.files, req, res);
+        const verifyImage = await upload(req.files);
         if (!verifyImage.success) {
             return res.status(404).json({ success: false, message: verifyImage.message });
         }
@@ -63,7 +62,7 @@ const createReport = async (req, res) => {
             severity_picker,
             proof_of_concept,
             vulnerability_impact,
-            submission_status
+            is_draft
         })
 
         for (const image of verifyImage.images) {
@@ -88,7 +87,7 @@ const updateReport = async (req, res) => {
         severity_picker: Joi.string().valid('low', 'medium', 'high', 'critical'),
         proof_of_concept: Joi.string(),
         vulnerability_impact: Joi.string(),
-        submission_status: Joi.string().valid('draft', 'submit'),
+        is_draft: Joi.boolean(),
         delete_image: Joi.array().items(Joi.string()).single()
     });
     const { error } = requestSchema.validate(req.body);
@@ -104,7 +103,7 @@ const updateReport = async (req, res) => {
             severity_picker,
             proof_of_concept,
             vulnerability_impact,
-            submission_status,
+            is_draft,
             delete_image
         } } = req;
         delete_image = delete_image?.split(',') || [];
@@ -112,27 +111,15 @@ const updateReport = async (req, res) => {
             return res.status(401).json({ success: false, message: "You are not a hacker" });
         }
 
-        const data = await Report.findById(report_id);
+        const data = await Report.findOne({ _id: report_id, hacker_id: id, is_draft: false });
         if (!data) {
             return res.status(404).json({ success: false, message: "Report not found" });
         }
 
-        const verifyHacker = await Report.findOne({ hacker_id: id, _id: report_id });
-        if (!verifyHacker) {
-            return res.status(404).json({ success: false, message: "You are not authorized to update this report" });
-        }
-
-        if (submission_status == 'submit') {
-            const updateReport = await Report.findOne({ _id: report_id, submission_status: 'submit' });
-            if (updateReport) {
-                return res.status(404).json({ success: false, message: "Report is already submitted" });
-            }
-        }
-
         if (req.files) {
-            const verifyImage = await upload(req.files, req, res);
+            const verifyImage = await upload(req.files);
             if (!verifyImage.success) {
-                return res.status(404).json({ success: false, message: verifyImage.message });
+                return res.status(400).json({ success: false, message: verifyImage.message });
             }
 
             if (delete_image && delete_image.length > 0) {
@@ -148,15 +135,8 @@ const updateReport = async (req, res) => {
                     image: image
                 });
             }
-        } else {
-            const verifyImage = await upload(req.files, req, res);
-            for (const image of verifyImage.images) {
-                await ReportImage.create({
-                    report_id: report_id,
-                    image: image
-                });
-            }
         }
+
 
         const updateObj = {
             vulnerability_title,
@@ -166,9 +146,10 @@ const updateReport = async (req, res) => {
             severity_picker,
             proof_of_concept,
             vulnerability_impact,
-            submission_status
+            is_draft
         }
-        await Report.findOneAndUpdate({ _id: report_id }, updateObj);
+        const data2 = await Report.findByIdAndUpdate(report_id, updateObj);
+        console.log('data :>> ', data2);
 
         return res.status(200).json({ success: true, message: "Report updated successfully" });
     } catch (error) {
