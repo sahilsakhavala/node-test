@@ -111,7 +111,7 @@ const updateReport = async (req, res) => {
             return res.status(401).json({ success: false, message: "You are not a hacker" });
         }
 
-        const data = await Report.findOne({ _id: report_id, hacker_id: id, is_draft: false });
+        const data = await Report.findOne({ _id: report_id, hacker_id: id, is_draft: true });
         if (!data) {
             return res.status(404).json({ success: false, message: "Report not found" });
         }
@@ -149,11 +149,44 @@ const updateReport = async (req, res) => {
             is_draft
         }
         const data2 = await Report.findByIdAndUpdate(report_id, updateObj);
-        console.log('data :>> ', data2);
 
         return res.status(200).json({ success: true, message: "Report updated successfully" });
     } catch (error) {
         console.error("Error updating report:", error);
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+}
+
+const getReportForHacker = async (req, res) => {
+    try {
+        const { user: { id, role } } = req;
+        if (role !== 'hacker') {
+            return res.status(401).json({ success: false, message: "You are not a hacker" });
+        }
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        const totaldata = await Report.countDocuments({ hacker_id: id, is_draft: false });
+
+        const data = await Report.find({ hacker_id: id, is_draft: false })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .populate('report_image');
+
+        const totalPages = Math.ceil(totaldata / limit);
+        return res.status(200).json({
+            success: true,
+            data: data,
+            totalPages: totalPages,
+            lastPage: totalPages,
+            currentPage: page,
+            previousPage: page - 1,
+        });
+    } catch (error) {
+        console.error(error);
         return res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }

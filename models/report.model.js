@@ -55,6 +55,16 @@ const reportSchema = new mongoose.Schema({
     }
 )
 
+reportSchema.set("toObject", { virtuals: true, setter: true, getter: true });
+reportSchema.set("toJSON", { virtuals: true, setter: true, getter: true });
+
+reportSchema.virtual('report_image', {
+    ref: 'report_images',
+    localField: '_id',
+    foreignField: 'report_id',
+    justOne: false
+});
+
 const Report = mongoose.model('reports', reportSchema);
 
 export {

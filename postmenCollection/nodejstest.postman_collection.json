@@ -983,6 +983,168 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "report",
+			"item": [
+				{
+					"name": "add-report",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{hacker_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "vulnerability_title",
+									"value": "Sample Title",
+									"type": "text"
+								},
+								{
+									"key": "vulnerability_target",
+									"value": "Sample Title",
+									"type": "text"
+								},
+								{
+									"key": "vulnerability_endpoint",
+									"value": "Sample Title",
+									"type": "text"
+								},
+								{
+									"key": "severity_level",
+									"value": "Sample Title",
+									"type": "text"
+								},
+								{
+									"key": "severity_picker",
+									"value": "low",
+									"type": "text"
+								},
+								{
+									"key": "proof_of_concept",
+									"value": "Sample proof_of_concept",
+									"type": "text"
+								},
+								{
+									"key": "vulnerability_impact",
+									"value": "Sample vulnerability_impact",
+									"type": "text"
+								},
+								{
+									"key": "attachment",
+									"type": "file",
+									"src": [
+										"/Users/mac/Downloads/sample-zip-file copy 1.zip",
+										"/Users/mac/Downloads/sample-zip-file copy 4.zip"
+									]
+								},
+								{
+									"key": "is_draft",
+									"value": "true",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/create-report/6613c1d6f611b4e3f349b24a",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"create-report",
+								"6613c1d6f611b4e3f349b24a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-report",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{hacker_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "vulnerability_title",
+									"value": "Sample Title2",
+									"type": "text"
+								},
+								{
+									"key": "vulnerability_target",
+									"value": "Sample Title2",
+									"type": "text"
+								},
+								{
+									"key": "vulnerability_endpoint",
+									"value": "Sample Title2",
+									"type": "text"
+								},
+								{
+									"key": "severity_level",
+									"value": "Sample Title2",
+									"type": "text"
+								},
+								{
+									"key": "severity_picker",
+									"value": "low",
+									"type": "text"
+								},
+								{
+									"key": "proof_of_concept",
+									"value": "Sample proof_of_concept2",
+									"type": "text"
+								},
+								{
+									"key": "vulnerability_impact",
+									"value": "Sample vulnerability_impact2",
+									"type": "text"
+								},
+								{
+									"key": "attachment",
+									"type": "file",
+									"src": "/Users/mac/Downloads/sample-zip-file copy 1.zip"
+								},
+								{
+									"key": "is_draft",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "delete_image",
+									"value": "66160c9482d1193395efdaff",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/update-report/66160c9482d1193395efdafb",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"update-report",
+								"66160c9482d1193395efdafb"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
