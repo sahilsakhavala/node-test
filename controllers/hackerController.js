@@ -7,6 +7,7 @@ import { sendMail } from '../helper/mail.js';
 import { createToken, verifyToken } from '../helper/jwtToken.js';
 import ejs from 'ejs'
 import { fileValidation } from '../helper/image.js';
+import { deleteFile } from '../helper/delete.file.js';
 
 const register = async (req, res) => {
     const registerSchema = Joi.object({
@@ -117,6 +118,19 @@ const update_profile = async (req, res) => {
             profile_image,
             wallet_id
         };
+
+        if (req.files) {
+            const file = req.files
+            const image = uploadFile(file);
+            const verifyFile = await fileValidation(file);
+            if (!verifyFile.success) {
+                return res.status(422).json({
+                    success: false,
+                    message: verifyFile.message
+                });
+            }
+            updateObj.profile_image = image
+        }
 
         const findAdmin = await Hacker.findById(id);
 

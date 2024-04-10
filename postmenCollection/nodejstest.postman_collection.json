@@ -253,7 +253,7 @@
 								},
 								{
 									"key": "password",
-									"value": "company@222",
+									"value": "12345678",
 									"type": "text"
 								}
 							]
@@ -332,6 +332,11 @@
 									"key": "profile_image",
 									"type": "file",
 									"src": "/C:/Users/Jay Bhavani/Pictures/Camera Roll/putting-on-headphones.jpg"
+								},
+								{
+									"key": "wallet_id",
+									"value": "hybvfce85f41ew8fvbdshycefw6",
+									"type": "text"
 								}
 							]
 						},
@@ -422,7 +427,7 @@
 								},
 								{
 									"key": "password",
-									"value": "company@222",
+									"value": "12345678",
 									"type": "text"
 								}
 							]
@@ -488,7 +493,7 @@
 							"formdata": [
 								{
 									"key": "request_id",
-									"value": "6613bac2ffe7f3e6a0bd80bb",
+									"value": "661625be678488d69ec243be",
 									"type": "text"
 								},
 								{
@@ -548,6 +553,77 @@
 					"response": []
 				},
 				{
+					"name": "approve-program",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "program_id",
+									"value": "66162624678488d69ec243db",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "approved",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/approve-program",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"approve-program"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reopen-program",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "program_id",
+									"value": "6613bda171d5a9424132b450",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/reopen-program",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"reopen-program"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "get-program-admin-by-status",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -587,53 +663,6 @@
 									"key": "limit",
 									"value": "2"
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get-approved-program-company",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{company_token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{url}}/get-approved-program-for-company",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"get-approved-program-for-company"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get-program-hacker",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{hacker_token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{url}}/get-program-for-hacker/",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"get-program-for-hacker",
-								""
 							]
 						}
 					},
@@ -696,7 +725,7 @@
 								{
 									"key": "logo",
 									"type": "file",
-									"src": "/C:/Users/Jay Bhavani/Pictures/XOsX.gif"
+									"src": "/Users/mac/Desktop/image/mahadev.jpg"
 								}
 							]
 						},
@@ -708,6 +737,86 @@
 							"path": [
 								"update-program-by-admin",
 								"660fa0c088643c7fb876295e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-program-admin-by-id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/get-program-for-admin/660fda012c6a5742ef34fcf6",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"get-program-for-admin",
+								"660fda012c6a5742ef34fcf6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "close-program-by-admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "program_id",
+									"value": "6613bda171d5a9424132b450",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/close-program-by-admin",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"close-program-by-admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-approved-program-company",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{company_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/get-approved-program-for-company",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"get-approved-program-for-company"
 							]
 						}
 					},
@@ -789,13 +898,13 @@
 					"response": []
 				},
 				{
-					"name": "approve-program",
+					"name": "close-program-by-company",
 					"request": {
 						"method": "POST",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{admin_token}}",
+								"value": "Bearer {{company_token}}",
 								"type": "text"
 							}
 						],
@@ -804,47 +913,18 @@
 							"formdata": [
 								{
 									"key": "program_id",
-									"value": "6613bda171d5a9424132b450",
-									"type": "text"
-								},
-								{
-									"key": "status",
-									"value": "approved",
+									"value": "66137b281c29ad7a9440c1b2",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{url}}/approve-program",
+							"raw": "{{url}}/close-program-by-company",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"approve-program"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get-program-admin-by-id",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{admin_token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{url}}/get-program-for-admin/660fda012c6a5742ef34fcf6",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"get-program-for-admin",
-								"660fda012c6a5742ef34fcf6"
+								"close-program-by-company"
 							]
 						}
 					},
@@ -884,99 +964,24 @@
 					"response": []
 				},
 				{
-					"name": "close-program-by-admin",
+					"name": "get-program-hacker",
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer {{admin_token}}",
+								"value": "Bearer {{hacker_token}}",
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "program_id",
-									"value": "6613bda171d5a9424132b450",
-									"type": "text"
-								}
-							]
-						},
 						"url": {
-							"raw": "{{url}}/close-program-by-admin",
+							"raw": "{{url}}/get-program-for-hacker/",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"close-program-by-admin"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "close-program-by-company",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{company_token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "program_id",
-									"value": "66137b281c29ad7a9440c1b2",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{url}}/close-program-by-company",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"close-program-by-company"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "reopen-program",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{admin_token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "program_id",
-									"value": "6613bda171d5a9424132b450",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{url}}/reopen-program",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"reopen-program"
+								"get-program-for-hacker",
+								""
 							]
 						}
 					},
@@ -1052,13 +1057,13 @@
 							]
 						},
 						"url": {
-							"raw": "{{url}}/create-report/6613c1d6f611b4e3f349b24a",
+							"raw": "{{url}}/create-report/66162624678488d69ec243db",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"create-report",
-								"6613c1d6f611b4e3f349b24a"
+								"66162624678488d69ec243db"
 							]
 						}
 					},
@@ -1132,13 +1137,103 @@
 							]
 						},
 						"url": {
-							"raw": "{{url}}/update-report/66160c9482d1193395efdafb",
+							"raw": "{{url}}/update-report/66162691eef6cc89697ed34e",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"update-report",
-								"66160c9482d1193395efdafb"
+								"66162691eef6cc89697ed34e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-report-for-admin",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/get-report-for-admin/?is_draft=true",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"get-report-for-admin",
+								""
+							],
+							"query": [
+								{
+									"key": "is_draft",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-report-for-hacker",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{hacker_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/get-report-for-hacker/?is_draft=true",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"get-report-for-hacker",
+								""
+							],
+							"query": [
+								{
+									"key": "is_draft",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-report-for-company",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{company_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/get-report-for-company/?is_draft=true",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"get-report-for-company",
+								""
+							],
+							"query": [
+								{
+									"key": "is_draft",
+									"value": "true"
+								}
 							]
 						}
 					},
@@ -1177,17 +1272,17 @@
 		},
 		{
 			"key": "admin_token",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjEzYmFjMmZmZTdmM2U2YTBiZDgwYmIiLCJpYXQiOjE3MTI1Njk2NDV9.S70k90YHf5bJiaj1WrfrhH3vKtbx3CGKTmQvPbIYK8A",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjE2MjM2MDI5MjMwYzU4OWFlMTU5ZTIiLCJpYXQiOjE3MTI3Mjc0NDJ9.5akQptwD1jzB7NmQlN7kf5ck1Q5WIImJl-PAI_gDodc",
 			"type": "string"
 		},
 		{
 			"key": "company_token",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjEzYmQ1YjcxZDVhOTQyNDEzMmI0NDQiLCJpYXQiOjE3MTI1Njk3MTd9.axRi7woRxxvrneo9GLh0CbQs14MLA0O2MA3F-AYxe30",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjE2MjVkMTY3ODQ4OGQ2OWVjMjQzY2YiLCJpYXQiOjE3MTI3Mjc1NDV9.Rk3Inbz03y86aAUtrUZILnJ8-7j5VvFupw9hOxj5uDA",
 			"type": "string"
 		},
 		{
 			"key": "hacker_token",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjEzYjlhMGQ3ZTZkM2ZiODgxZmEzZTAiLCJpYXQiOjE3MTI1Njg5ODl9.iEEEfSny7TGdUqZWSt_UE6uzSVQ8sQZSGrvI0uFIk60",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjE2MjM2MDI5MjMwYzU4OWFlMTU5ZTIiLCJpYXQiOjE3MTI3MjczNjB9.wVqlJAUCrLxFIFt1FaaU7R1ZdF4xO-2hh8BVE8ei6u8",
 			"type": "string"
 		}
 	]

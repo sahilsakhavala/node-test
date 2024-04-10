@@ -4,6 +4,9 @@ import { Program } from "../models/program.model.js";
 import { ReportImage } from "../models/reportImage.model.js";
 import { upload } from "../helper/image.js";
 import Joi from 'joi';
+import { deleteFile } from "../helper/delete.file.js";
+import path from 'path';
+import fs from 'fs';
 
 const createReport = async (req, res) => {
     const requestSchema = Joi.object({
@@ -52,7 +55,7 @@ const createReport = async (req, res) => {
             return res.status(404).json({ success: false, message: verifyImage.message });
         }
 
-        await Report.create({
+        const reportData = await Report.create({
             hacker_id: id,
             program_id,
             company_id: verifyProgram.company_id,
@@ -68,7 +71,7 @@ const createReport = async (req, res) => {
 
         for (const image of verifyImage.images) {
             await ReportImage.create({
-                report_id: data._id,
+                report_id: reportData._id,
                 image: image
             });
         }
@@ -126,6 +129,11 @@ const updateReport = async (req, res) => {
             if (delete_image && delete_image.length > 0) {
                 for (let imageId of delete_image) {
                     imageId = imageId.trim();
+
+                    const findImage = await ReportImage.findOne({ _id: imageId });
+                    if (findImage) {
+                        deleteFile(findImage.image)
+                    }
                     await ReportImage.findOneAndDelete({ _id: imageId });
                 }
             }
@@ -137,7 +145,6 @@ const updateReport = async (req, res) => {
                 });
             }
         }
-
 
         const updateObj = {
             vulnerability_title,
@@ -156,7 +163,7 @@ const updateReport = async (req, res) => {
         console.error("Error updating report:", error);
         return res.status(500).json({ success: false, message: "Internal Server Error" });
     }
-}
+};
 
 const getReportForHacker = async (req, res) => {
     try {

@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs'
+import { fileURLToPath } from 'url';
 
 async function fileValidation(file) {
     try {
@@ -42,8 +43,15 @@ const upload = async (fileObjArray) => {
         if (path.extname(fileObj.originalname) !== '.zip') {
             hasInvalidFiles = true;
         } else {
-            let image = `${Date.now()}_${index}${path.extname(fileObj.originalname)}`;
-            let uploadPath = path.join(image, '../public/image', `${Date.now()}` + image);
+            const originalFilename = fileObj.originalname;
+            const extname = path.extname(originalFilename);
+            const timestamp = Date.now();
+
+            const image = `${timestamp}${extname}`;
+
+            const __filename = fileURLToPath(import.meta.url);
+            const __dirname = path.dirname(__filename);
+            let uploadPath = path.join(__dirname, '../public/image/', image);
             let outStream = fs.createWriteStream(uploadPath);
             outStream.write(fileObj.buffer);
             outStream.end();
@@ -61,6 +69,7 @@ const upload = async (fileObjArray) => {
 
     return { success: true, images };
 }
+
 
 
 export {
