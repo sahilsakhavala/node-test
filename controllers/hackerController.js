@@ -89,6 +89,7 @@ const update_profile = async (req, res) => {
     const schema = Joi.object({
         name: Joi.string(),
         profile_image: Joi.string(),
+        wallet_id: Joi.string(),
         new_password: Joi.string().min(8),
         old_password: Joi.when('new_password', {
             is: Joi.exist(),
@@ -103,7 +104,7 @@ const update_profile = async (req, res) => {
     }
     try {
         const { user: { id, role },
-            body: { name, new_password, old_password },
+            body: { name, new_password, old_password, wallet_id },
             files: { profile_image },
         } = req;
 
@@ -113,7 +114,8 @@ const update_profile = async (req, res) => {
 
         const updateObj = {
             name,
-            profile_image
+            profile_image,
+            wallet_id
         };
 
         const findAdmin = await Hacker.findById(id);

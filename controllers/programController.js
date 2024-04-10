@@ -191,7 +191,7 @@ const getProgramForHacker = async (req, res) => {
             return res.status(200).json({ success: true, data: data })
         }
 
-        const data = await Program.find({ is_vdp: false })
+        const data = await Program.find({ is_vdp: false, status: 'approved' })
             .sort({ createdAt: -1 })
             .populate('severity_rating');
         return res.status(200).json({ success: true, data: data })

@@ -55,6 +55,7 @@ const createReport = async (req, res) => {
         await Report.create({
             hacker_id: id,
             program_id,
+            company_id: verifyProgram.company_id,
             vulnerability_title,
             vulnerability_target,
             vulnerability_endpoint,
@@ -159,7 +160,7 @@ const updateReport = async (req, res) => {
 
 const getReportForHacker = async (req, res) => {
     try {
-        const { user: { id, role } } = req;
+        const { user: { id, role }, query: { is_draft } } = req;
         if (role !== 'hacker') {
             return res.status(401).json({ success: false, message: "You are not a hacker" });
         }
@@ -168,9 +169,9 @@ const getReportForHacker = async (req, res) => {
         const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
 
-        const totaldata = await Report.countDocuments({ hacker_id: id, is_draft: false });
+        const totaldata = await Report.countDocuments({ hacker_id: id, is_draft: is_draft });
 
-        const data = await Report.find({ hacker_id: id, is_draft: false })
+        const data = await Report.find({ hacker_id: id, is_draft: is_draft })
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
@@ -191,7 +192,75 @@ const getReportForHacker = async (req, res) => {
     }
 }
 
+const getReportForCompany = async (req, res) => {
+    try {
+        const { user: { id, role }, query: { is_draft } } = req;
+        if (role !== 'company') {
+            return res.status(401).json({ success: false, message: "You are not a company" });
+        }
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        const totaldata = await Report.countDocuments({ company_id: id, is_draft: is_draft });
+        const data = await Report.find({ company_id: id, is_draft: is_draft })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .populate('report_image');
+        return res.status(200).json({
+            success: true,
+            data: data,
+            totalPages: Math.ceil(totaldata / limit),
+            lastPage: Math.ceil(totaldata / limit),
+            currentPage: page,
+            previousPage: page - 1
+        })
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+}
+
+const getReportForAdmin = async (req, res) => {
+    try {
+        const { user: { id, role }, query: { is_draft }
+        } = req;
+        if (role !== 'admin') {
+            return res.status(401).json({ success: false, message: "You are not an admin" });
+        }
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        const totaldata = await Report.countDocuments({ is_draft: is_draft });
+        const data = await Report.find({ is_draft: is_draft })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .populate('report_image');
+
+        return res.status(200).json({
+            success: true,
+            data: data,
+            totalPages: Math.ceil(totaldata / limit),
+            lastPage: Math.ceil(totaldata / limit),
+            currentPage: page,
+            previousPage: page - 1
+        })
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+}
+
 export {
     createReport,
-    updateReport
+    updateReport,
+    getReportForHacker,
+    getReportForCompany,
+    getReportForAdmin
 }

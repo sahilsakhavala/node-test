@@ -1,6 +1,6 @@
 import express from 'express'
 const app = express()
-import connectdb from './db/connectdb.js'
+import connection from './db/connectdb.js'
 import router from './routes/index.js'
 import multer from 'multer'
 import path from 'path'
@@ -18,7 +18,6 @@ app.use(express.static(path.join(process.cwd(), 'public')));
 
 app.use('/api/v1', router)
 
-connectdb();
 
 app.listen(process.env.PORT || 3000, () => {
     console.log('Server Listening at 3000');

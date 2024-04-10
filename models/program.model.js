@@ -48,7 +48,11 @@ const programSchema = new mongoose.Schema({
         enum: ["pending", "approved", "rejected", "closed"],
         default: "pending"
     }
-})
+},
+    {
+        timestamps: true
+    }
+)
 
 programSchema.set("toObject", { virtuals: true, setter: true, getter: true });
 programSchema.set("toJSON", { virtuals: true, setter: true, getter: true });

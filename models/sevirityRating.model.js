@@ -23,7 +23,11 @@ const severity_ratingSchema = new mongoose.Schema({
         type: Number,
         required: true
     }
-})
+},
+    {
+        timestamps: true
+    }
+)
 
 const SeverityRating = mongoose.model('severity_ratings', severity_ratingSchema);
 

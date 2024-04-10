@@ -11,6 +11,11 @@ const reportSchema = new mongoose.Schema({
         ref: 'programs',
         required: true
     },
+    company_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'companys',
+        required: true
+    },
     vulnerability_title: {
         type: String,
         required: true
