@@ -1,7 +1,7 @@
 import { Program } from "../models/program.model.js";
 import { SeverityRating } from "../models/sevirityRating.model.js";
 import Joi from 'joi'
-import uploadFile from "../middleware/uploadfile.js";
+import { uploadFile } from "../middleware/uploadfile.js";
 import { fileValidation } from "../helper/image.js";
 
 const createProgram = async (req, res) => {

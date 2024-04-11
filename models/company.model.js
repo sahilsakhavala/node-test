@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import config from "../config/db.config.js";
 
 const CompanySchema = new mongoose.Schema({
     name: {
@@ -19,7 +20,7 @@ const CompanySchema = new mongoose.Schema({
         default: null,
         get: function (profile_image) {
             if (profile_image) {
-                return `${process.env.BASE_URL}/image/${profile_image}`;
+                return `${config.url}/image/${profile_image}`;
             }
             return null
         }

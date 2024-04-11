@@ -1,0 +1,46 @@
+1) user Update Profile
+
+step:-
+1) add comment update profile api
+2) add try catch block if error then return error 
+3) add validation for field and if there is new password then old password is required
+4) if validation failed then throw error
+5) destructure payload data
+6) check user role if role is admin then throw error
+8) if req.files and req.files length > 0
+    :- check fileValidation only jpg,png,jpeg allowed
+    :- if fileValidation faile then throw error
+    :- if success then push image in updateObj
+9) if new_password and old_password
+    :- compare old_password and hacker.password
+    if failed then throw error and if success then hash new password
+    :- push password in updateObj
+    :- delete all token from usersession
+    :- if error in deleteToken then throw error
+10) find user and update 
+11) return response with success and message
+
+
+
+2) handle request api for company
+    :- in our scenario there is admin, hacker and company 
+    :- If the company wants to be registered, a request has to be sent to the admin
+
+1) add comment handle request api for company api
+2) add try catch block if error then return error 
+add validation for field 
+    :- status is approved and rejected only validation
+    :- if validation failed then throw error
+3) destructure payload data 
+4) check user role if role is not admin then throw error
+5) find pending request from request table if not found then throw error
+6) if status==approved 
+    :- before approving the request, check that the hacker or admin has not registered with the same email.
+    :- if found then throw error
+    :- update request table status == approved
+7) send email to registered email
+8) create company
+9) send response company request approved succesfully
+10) if status == rejected
+11) update request table status == rejected
+12) 9) send response company request rejected succesfully

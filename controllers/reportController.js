@@ -2,11 +2,10 @@ import { Report } from "../models/report.model.js";
 import { Hacker } from "../models/hacker.model.js";
 import { Program } from "../models/program.model.js";
 import { ReportImage } from "../models/reportImage.model.js";
-import { upload } from "../helper/image.js";
+import { upload } from "../middleware/uploadfile.js";
 import Joi from 'joi';
 import { deleteFile } from "../helper/delete.file.js";
-import path from 'path';
-import fs from 'fs';
+import { zipFileValidation } from "../helper/image.js";
 
 const createReport = async (req, res) => {
     const requestSchema = Joi.object({
@@ -50,10 +49,11 @@ const createReport = async (req, res) => {
             return res.status(404).json({ success: false, message: "First add wallet id" });
         }
 
-        const verifyImage = await upload(req.files);
-        if (!verifyImage.success) {
-            return res.status(404).json({ success: false, message: verifyImage.message });
+        const fileValidation = await zipFileValidation(req.files);
+        if (!fileValidation.success) {
+            return res.status(400).json({ success: false, message: fileValidation.message });
         }
+        const verifyImage = await upload(req.files);
 
         const reportData = await Report.create({
             hacker_id: id,
@@ -120,24 +120,20 @@ const updateReport = async (req, res) => {
             return res.status(404).json({ success: false, message: "Report not found" });
         }
 
-        if (req.files) {
-            const verifyImage = await upload(req.files);
-            if (!verifyImage.success) {
-                return res.status(400).json({ success: false, message: verifyImage.message });
-            }
+        const verifyImage = await upload(req.files);
+        if (delete_image && delete_image.length > 0) {
+            for (let imageId of delete_image) {
+                imageId = imageId.trim();
 
-            if (delete_image && delete_image.length > 0) {
-                for (let imageId of delete_image) {
-                    imageId = imageId.trim();
-
-                    const findImage = await ReportImage.findOne({ _id: imageId });
-                    if (findImage) {
-                        deleteFile(findImage.image)
-                    }
-                    await ReportImage.findOneAndDelete({ _id: imageId });
+                const findImage = await ReportImage.findOne({ _id: imageId });
+                if (findImage) {
+                    deleteFile(findImage.image)
                 }
+                await ReportImage.findOneAndDelete({ _id: imageId });
             }
+        }
 
+        if (req.files && req.files.length > 0) {
             for (const image of verifyImage.images) {
                 await ReportImage.create({
                     report_id: report_id,
@@ -156,7 +152,7 @@ const updateReport = async (req, res) => {
             vulnerability_impact,
             is_draft
         }
-        const data2 = await Report.findByIdAndUpdate(report_id, updateObj);
+        await Report.findByIdAndUpdate(report_id, updateObj);
 
         return res.status(200).json({ success: true, message: "Report updated successfully" });
     } catch (error) {
@@ -166,6 +162,13 @@ const updateReport = async (req, res) => {
 };
 
 const getReportForHacker = async (req, res) => {
+    const requestSchema = Joi.object({
+        is_draft: Joi.boolean().valid(true, false).required(),
+    });
+    const { error } = requestSchema.validate(req.query);
+    if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+    }
     try {
         const { user: { id, role }, query: { is_draft } } = req;
         if (role !== 'hacker') {
@@ -201,7 +204,7 @@ const getReportForHacker = async (req, res) => {
 
 const getReportForCompany = async (req, res) => {
     try {
-        const { user: { id, role }, query: { is_draft } } = req;
+        const { user: { id, role } } = req;
         if (role !== 'company') {
             return res.status(401).json({ success: false, message: "You are not a company" });
         }
@@ -210,8 +213,8 @@ const getReportForCompany = async (req, res) => {
         const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
 
-        const totaldata = await Report.countDocuments({ company_id: id, is_draft: is_draft });
-        const data = await Report.find({ company_id: id, is_draft: is_draft })
+        const totaldata = await Report.countDocuments({ company_id: id, is_draft: false });
+        const data = await Report.find({ company_id: id, is_draft: false })
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
@@ -233,8 +236,7 @@ const getReportForCompany = async (req, res) => {
 
 const getReportForAdmin = async (req, res) => {
     try {
-        const { user: { id, role }, query: { is_draft }
-        } = req;
+        const { user: { id, role } } = req;
         if (role !== 'admin') {
             return res.status(401).json({ success: false, message: "You are not an admin" });
         }
@@ -243,8 +245,8 @@ const getReportForAdmin = async (req, res) => {
         const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
 
-        const totaldata = await Report.countDocuments({ is_draft: is_draft });
-        const data = await Report.find({ is_draft: is_draft })
+        const totaldata = await Report.countDocuments({ is_draft: false });
+        const data = await Report.find({ is_draft: false })
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)

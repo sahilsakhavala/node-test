@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt'
-import uploadFile from "../middleware/uploadfile.js";
+import { uploadFile } from "../middleware/uploadfile.js";
 import { Hacker } from '../models/hacker.model.js';
 import { findUserByEmail } from '../helper/function.js';
 import Joi from 'joi';
@@ -22,7 +22,6 @@ const register = async (req, res) => {
     try {
         const { name, email, password } = req.body
         const file = req.files
-        const image = uploadFile(file);
         const verifyFile = await fileValidation(file);
         if (!verifyFile.success) {
             return res.status(422).json({
@@ -30,7 +29,7 @@ const register = async (req, res) => {
                 message: verifyFile.message
             });
         }
-
+        const image = uploadFile(file);
         const emailVerify = await findUserByEmail(email);
         if (emailVerify.user !== null) {
             return res.status(400).json({ success: false, message: "Email already exists" });
@@ -119,9 +118,8 @@ const update_profile = async (req, res) => {
             wallet_id
         };
 
-        if (req.files) {
+        if (req.files.length > 0) {
             const file = req.files
-            const image = uploadFile(file);
             const verifyFile = await fileValidation(file);
             if (!verifyFile.success) {
                 return res.status(422).json({
@@ -129,6 +127,7 @@ const update_profile = async (req, res) => {
                     message: verifyFile.message
                 });
             }
+            const image = uploadFile(file);
             updateObj.profile_image = image
         }
 
